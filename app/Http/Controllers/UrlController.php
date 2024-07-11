@@ -33,6 +33,15 @@ class UrlController extends Controller
         return response()->json(['short_url' => url($shortCode)]);
     }
 
+     private function generateUniqueShortCode()
+    {
+        do {
+            $shortCode = Str::random(6);
+        } while (Url::where('short_code', $shortCode)->exists());
+
+        return $shortCode;
+    }
+
     public function redirect($code)
     {
         $url = Url::where('short_code', $code)->firstOrFail();
